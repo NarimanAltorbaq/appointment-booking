@@ -26,11 +26,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Book">احجز موعد</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Admin">الإدارة</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -40,13 +47,6 @@
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2026 - BookingApp - <a asp-area="" asp-page="/Privacy">Privacy</a>
-
-            <li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-page="/Book">احجز موعد</a>
-</li>
-<li class="nav-item">
-    <a class="nav-link text-dark" asp-area="" asp-page="/Admin">الإدارة</a>
-</li>
         </div>
     </footer>
 
