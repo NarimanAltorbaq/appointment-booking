@@ -2,6 +2,7 @@ using BookingApp.Data;
 using BookingApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookingApp.Pages;
 
@@ -18,15 +19,25 @@ public class BookModel : PageModel
         Appointment.AppointmentTime = DateTime.Now.AddDays(1);
     }
 
-    public async Task<IActionResult> OnPostAsync()
-    {
-        if (!ModelState.IsValid) return Page();
+ public async Task<IActionResult> OnPostAsync()
+{
+    if (Appointment.AppointmentTime <= DateTime.Now)
+        ModelState.AddModelError("Appointment.AppointmentTime", "اختار وقت بالمستقبل");
 
-        Appointment.Status = "Pending";
-        _db.Appointments.Add(Appointment);
-        await _db.SaveChangesAsync();
+    var taken = await _db.Appointments.AnyAsync(a =>
+        a.AppointmentTime == Appointment.AppointmentTime &&
+        a.Status != "Cancelled");
 
-        TempData["Success"] = "تم تسجيل حجزك بنجاح!";
-        return RedirectToPage();
-    }
+    if (taken)
+        ModelState.AddModelError("Appointment.AppointmentTime", "هالوقت محجوز، اختار وقت تاني");
+
+    if (!ModelState.IsValid) return Page();
+
+    Appointment.Status = "Pending";
+    _db.Appointments.Add(Appointment);
+    await _db.SaveChangesAsync();
+
+    TempData["Success"] = "تم تسجيل حجزك بنجاح!";
+    return RedirectToPage();
+}
 }

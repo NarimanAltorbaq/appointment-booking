@@ -36,9 +36,13 @@
 
         <div class="mb-3">
             <label class="form-label">الموعد</label>
-            <input asp-for="Appointment.AppointmentTime" type="datetime-local" class="form-control" />
+          <input asp-for="Appointment.AppointmentTime" type="datetime-local" class="form-control" />
+          <span asp-validation-for="Appointment.AppointmentTime" class="text-danger"></span>
         </div>
 
         <button type="submit" class="btn btn-primary">احجز</button>
     </form>
 </div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
