@@ -1,0 +1,42 @@
+@page
+@model AdminModel
+@{
+    ViewData["Title"] = "لوحة الإدارة";
+}
+
+<div dir="rtl">
+    <h1>الحجوزات</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>الاسم</th>
+                <th>الهاتف</th>
+                <th>الخدمة</th>
+                <th>الموعد</th>
+                <th>الحالة</th>
+                <th>إجراء</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var a in Model.Appointments)
+        {
+            <tr>
+                <td>@a.CustomerName</td>
+                <td>@a.Phone</td>
+                <td>@a.Service</td>
+                <td>@a.AppointmentTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@a.Status</td>
+                <td>
+                    <form method="post" style="display:inline">
+                        <button asp-page-handler="Confirm" asp-route-id="@a.Id"
+                                class="btn btn-success btn-sm">تأكيد</button>
+                        <button asp-page-handler="Cancel" asp-route-id="@a.Id"
+                                class="btn btn-danger btn-sm">إلغاء</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
