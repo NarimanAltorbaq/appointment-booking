@@ -1,0 +1,44 @@
+@page
+@model BookModel
+@{
+    ViewData["Title"] = "احجز موعد";
+}
+
+<div dir="rtl" style="max-width:500px">
+    <h1>احجز موعد</h1>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <form method="post">
+        <div class="mb-3">
+            <label class="form-label">الاسم</label>
+            <input asp-for="Appointment.CustomerName" class="form-control" />
+            <span asp-validation-for="Appointment.CustomerName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">رقم الهاتف</label>
+            <input asp-for="Appointment.Phone" class="form-control" />
+            <span asp-validation-for="Appointment.Phone" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">الخدمة</label>
+            <select asp-for="Appointment.Service" class="form-select">
+                <option>كشفية</option>
+                <option>مراجعة</option>
+                <option>استشارة</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">الموعد</label>
+            <input asp-for="Appointment.AppointmentTime" type="datetime-local" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">احجز</button>
+    </form>
+</div>
