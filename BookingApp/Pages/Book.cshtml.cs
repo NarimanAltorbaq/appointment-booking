@@ -16,28 +16,32 @@ public class BookModel : PageModel
 
     public void OnGet()
     {
-        Appointment.AppointmentTime = DateTime.Now.AddDays(1);
+        var t = DateTime.Now.AddDays(1);
+        Appointment.AppointmentTime = new DateTime(t.Year, t.Month, t.Day, t.Hour, 0, 0);
     }
 
- public async Task<IActionResult> OnPostAsync()
-{
-    if (Appointment.AppointmentTime <= DateTime.Now)
-        ModelState.AddModelError("Appointment.AppointmentTime", "اختار وقت بالمستقبل");
+    public async Task<IActionResult> OnPostAsync()
+    {
+        var t = Appointment.AppointmentTime;
+        Appointment.AppointmentTime = new DateTime(t.Year, t.Month, t.Day, t.Hour, t.Minute, 0);
 
-    var taken = await _db.Appointments.AnyAsync(a =>
-        a.AppointmentTime == Appointment.AppointmentTime &&
-        a.Status != "Cancelled");
+        if (Appointment.AppointmentTime <= DateTime.Now)
+            ModelState.AddModelError("Appointment.AppointmentTime", "اختار وقت بالمستقبل");
 
-    if (taken)
-        ModelState.AddModelError("Appointment.AppointmentTime", "هالوقت محجوز، اختار وقت تاني");
+        var taken = await _db.Appointments.AnyAsync(a =>
+            a.AppointmentTime == Appointment.AppointmentTime &&
+            a.Status != "Cancelled");
 
-    if (!ModelState.IsValid) return Page();
+        if (taken)
+            ModelState.AddModelError("Appointment.AppointmentTime", "هالوقت محجوز، اختار وقت تاني");
 
-    Appointment.Status = "Pending";
-    _db.Appointments.Add(Appointment);
-    await _db.SaveChangesAsync();
+        if (!ModelState.IsValid) return Page();
 
-    TempData["Success"] = "تم تسجيل حجزك بنجاح!";
-    return RedirectToPage();
-}
+        Appointment.Status = "Pending";
+        _db.Appointments.Add(Appointment);
+        await _db.SaveChangesAsync();
+
+        TempData["Success"] = "تم تسجيل حجزك بنجاح!";
+        return RedirectToPage();
+    }
 }
